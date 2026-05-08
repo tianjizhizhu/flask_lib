@@ -137,7 +137,7 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
               <BranchMessageItem key={message.id} message={message} />
             ))}
             {isTyping && streamingContent && (
-              <div className="flex gap-3 p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
+              <div className="flex gap-3 p-3 bg-white/80 backdrop-blur-md border border-gray-100 rounded-2xl shadow-sm">
                 <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4 text-white" />
                 </div>
@@ -203,7 +203,11 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
 const BranchMessageItem: React.FC<{ message: Message }> = ({ message }) => {
   return (
     <div
-      className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+      className={`flex gap-3 p-3 rounded-2xl ${
+        message.role === 'user'
+          ? 'bg-gradient-to-br from-indigo-50 to-purple-50'
+          : 'bg-white/80 backdrop-blur-md border border-gray-100 shadow-sm'
+      }`}
     >
       <div
         className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
@@ -218,16 +222,11 @@ const BranchMessageItem: React.FC<{ message: Message }> = ({ message }) => {
           <Bot className="w-4 h-4" />
         )}
       </div>
-      <div
-        className={`flex-1 max-w-[85%] ${message.role === 'user' ? 'text-right' : ''}`}
-      >
-        <div
-          className={`inline-block px-4 py-2 rounded-2xl text-sm ${
-            message.role === 'user'
-              ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-tr-sm shadow-md'
-              : 'bg-gradient-to-br from-emerald-50 to-teal-50 text-gray-700 rounded-tl-sm'
-          }`}
-        >
+      <div className="flex-1 min-w-0">
+        <div className="text-xs font-semibold text-gray-800 mb-1">
+          {message.role === 'user' ? '你' : 'AI助手'}
+        </div>
+        <div className="text-sm text-gray-700">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {message.content}
           </ReactMarkdown>
