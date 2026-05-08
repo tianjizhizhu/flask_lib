@@ -169,7 +169,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick, onMenuClick
 
       {activeBranch && (
         <>
-          <div className="hidden md:flex w-96 flex-shrink-0 overflow-hidden transition-all duration-300">
+          <div className="hidden md:block w-96 flex-shrink-0 h-full overflow-hidden transition-all duration-300">
             <BranchPanel branch={activeBranch} onClose={handleCloseBranch} />
           </div>
           

@@ -50,7 +50,7 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
   };
 
   return (
-    <div className="flex-1 w-96 bg-white/80 backdrop-blur-md border-l border-gray-100 flex flex-col h-full shadow-xl">
+    <div className="w-full h-full bg-white/80 backdrop-blur-md border-l border-gray-100 flex flex-col shadow-xl">
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-purple-50">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
