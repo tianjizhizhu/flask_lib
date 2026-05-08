@@ -30,17 +30,17 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
   return (
     <div
       className={clsx(
-        'flex gap-4 p-4 rounded-2xl animate-fadeIn',
-        message.role === 'user' ? 'bg-indigo-50' : 'bg-white border border-gray-100',
-        isBranchActive && 'border-r-4 border-r-emerald-400'
+        'flex gap-4 p-4 md:p-5 rounded-2xl animate-fadeIn shadow-sm',
+        message.role === 'user' ? 'bg-gradient-to-br from-orange-50 to-amber-50' : 'bg-white border border-gray-100',
+        isBranchActive && 'border-r-4 border-r-orange-400'
       )}
     >
       <div
         className={clsx(
-          'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0',
+          'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md',
           message.role === 'user'
-            ? 'bg-indigo-600 text-white'
-            : 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white'
+            ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white'
+            : 'bg-gradient-to-br from-violet-500 to-purple-600 text-white'
         )}
       >
         {message.role === 'user' ? (
@@ -52,11 +52,11 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-sm font-semibold text-gray-800">
             {message.role === 'user' ? '你' : 'AI助手'}
           </span>
           {message.role === 'system' && (
-            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full">
+            <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">
               分支同步
             </span>
           )}
@@ -84,7 +84,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                 return (
                   <div className="my-3 rounded-xl overflow-hidden border border-gray-200">
                     {match && (
-                      <div className="px-4 py-2 bg-gray-800 text-gray-400 text-xs font-mono">
+                      <div className="px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 text-xs font-mono">
                         {match[1]}
                       </div>
                     )}
@@ -109,7 +109,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-indigo-600 hover:text-indigo-700 underline"
+                    className="text-orange-600 hover:text-orange-700 underline underline-offset-2"
                   >
                     {children}
                   </a>
@@ -117,7 +117,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
               },
               blockquote({ children }) {
                 return (
-                  <blockquote className="border-l-4 border-indigo-300 pl-4 italic text-gray-600 my-3">
+                  <blockquote className="border-l-4 border-orange-300 pl-4 italic text-gray-600 my-3">
                     {children}
                   </blockquote>
                 );
@@ -144,7 +144,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
           <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200"
             >
               {copied ? (
                 <>
@@ -162,22 +162,22 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
               <button
                 onClick={() => onToggleBranch(message.id)}
                 className={clsx(
-                  'flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg transition-colors',
+                  'flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg transition-all duration-200',
                   isBranchActive
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50'
+                    ? 'bg-gradient-to-r from-orange-100 to-amber-100 text-orange-700'
+                    : 'text-orange-600 hover:text-orange-700 hover:bg-orange-50'
                 )}
               >
-                <ChevronRight className={clsx('w-3.5 h-3.5 transition-transform', isBranchActive && 'rotate-90')} />
+                <ChevronRight className={clsx('w-3.5 h-3.5 transition-transform duration-200', isBranchActive && 'rotate-90')} />
                 <span>{isBranchActive ? '收起分支' : '查看分支'}</span>
                 {branch.isSynced && (
-                  <span className="ml-1 px-1.5 py-0.5 bg-emerald-500 text-white text-xs rounded">已同步</span>
+                  <span className="ml-1 px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-amber-600 text-white text-xs rounded-full font-medium">已同步</span>
                 )}
               </button>
             ) : (
               <button
                 onClick={() => onCreateBranch(message.id)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-orange-600 hover:text-orange-700 hover:bg-orange-50 rounded-lg transition-all duration-200"
               >
                 <GitBranch className="w-3.5 h-3.5" />
                 <span>创建分支</span>

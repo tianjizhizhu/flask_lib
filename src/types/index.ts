@@ -55,11 +55,11 @@ export interface ChatResponse {
 }
 
 export const STORAGE_KEYS = {
-  CONVERSATIONS: 'anchorchat_conversations',
-  BRANCHES: 'anchorchat_branches',
-  API_CONFIG: 'anchorchat_api_config',
-  CURRENT_CONVERSATION: 'anchorchat_current_conversation',
+  CONVERSATIONS: 'forkforkchat_conversations',
+  BRANCHES: 'forkforkchat_branches',
+  API_CONFIG: 'forkforkchat_api_config',
+  CURRENT_CONVERSATION: 'forkforkchat_current_conversation',
 } as const;
 
-export const DEFAULT_MODEL = 'deepseek-ai/DeepSeek-V3';
+export const DEFAULT_MODEL = 'MiniMax/MiniMax-M2';
 export const DEFAULT_BASE_URL = 'https://api.siliconflow.cn/v1';

@@ -28,6 +28,19 @@ interface ConversationState {
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
 
+const generateTitle = (content: string): string => {
+  const trimmed = content.trim();
+  if (trimmed.length <= 30) {
+    return trimmed;
+  }
+  const sentences = trimmed.split(/[。！？\n]/);
+  if (sentences.length > 0 && sentences[0].trim().length > 0) {
+    const firstSentence = sentences[0].trim();
+    return firstSentence.length <= 30 ? firstSentence : firstSentence.slice(0, 30) + '...';
+  }
+  return trimmed.slice(0, 30) + '...';
+};
+
 export const useConversationStore = create<ConversationState>((set, get) => ({
   conversations: [],
   currentConversation: null,
@@ -137,7 +150,7 @@ export const useConversationStore = create<ConversationState>((set, get) => ({
             ? {
                 ...c,
                 messages: [...c.messages, assistantMessage],
-                title: c.messages.length === 0 ? content.slice(0, 20) + (content.length > 20 ? '...' : '') : c.title,
+                title: c.messages.length === 0 ? generateTitle(content) : c.title,
                 updatedAt: Date.now(),
               }
             : c

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Eye, EyeOff, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { useConfigStore } from '../stores/configStore';
+import { DEFAULT_MODEL } from '../types';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -10,7 +11,7 @@ interface SettingsModalProps {
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
   const { config, setConfig, testConnection, clearConfig } = useConfigStore();
   const [apiKey, setApiKey] = useState(config.apiKey);
-  const [model, setModel] = useState(config.model);
+  const [model, setModel] = useState(config.model || DEFAULT_MODEL);
   const [showApiKey, setShowApiKey] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
   const [isTesting, setIsTesting] = useState(false);
@@ -34,13 +35,24 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   const handleClear = () => {
     clearConfig();
     setApiKey('');
-    setModel('deepseek-ai/DeepSeek-V3');
+    setModel(DEFAULT_MODEL);
     setTestResult(null);
   };
 
+  const models = [
+    { value: 'MiniMax/MiniMax-M2', label: 'MiniMax M2' },
+    { value: 'MiniMax/MiniMax-AI', label: 'MiniMax AI' },
+    { value: 'deepseek-ai/DeepSeek-V3', label: 'DeepSeek V3' },
+    { value: 'deepseek-ai/DeepSeek-R1', label: 'DeepSeek R1' },
+    { value: 'Qwen/Qwen2.5-72B-Instruct', label: 'Qwen 2.5 72B' },
+    { value: 'Qwen/Qwen2.5-32B-Instruct', label: 'Qwen 2.5 32B' },
+    { value: 'THUDM/glm-4-plus', label: 'GLM-4 Plus' },
+    { value: 'THUDM/glm-4-flash', label: 'GLM-4 Flash' },
+  ];
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h2 className="text-xl font-semibold text-gray-800">API配置</h2>
           <button
@@ -62,7 +74,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="请输入您的API密钥"
-                className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
               />
               <button
                 type="button"
@@ -88,13 +100,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
             <select
               value={model}
               onChange={(e) => setModel(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all bg-white"
             >
-              <option value="deepseek-ai/DeepSeek-V3">DeepSeek V3</option>
-              <option value="deepseek-ai/DeepSeek-R1">DeepSeek R1</option>
-              <option value="Qwen/Qwen2.5-72B-Instruct">Qwen 2.5 72B</option>
-              <option value="Qwen/Qwen2.5-7B-Instruct">Qwen 2.5 7B</option>
-              <option value="THUDM/glm-4-9b-chat">GLM-4 9B</option>
+              {models.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -148,7 +160,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
+            className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-xl hover:from-orange-600 hover:to-amber-700 transition-all shadow-lg shadow-orange-500/20"
           >
             保存配置
           </button>

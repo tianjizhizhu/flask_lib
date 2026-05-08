@@ -40,7 +40,6 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
 
   const handleSync = () => {
     syncBranch(branch.messageId);
-    onClose();
   };
 
   const handleDelete = () => {
@@ -51,10 +50,10 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
   };
 
   return (
-    <div className="w-96 bg-white border-l border-gray-200 flex flex-col h-full">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-transparent">
+    <div className="w-96 bg-white border-l border-gray-100 flex flex-col h-full shadow-xl">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-orange-50 to-transparent">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center">
             <svg
               className="w-4 h-4 text-white"
               fill="none"
@@ -76,21 +75,21 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
         </div>
         <button
           onClick={onClose}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 rounded-xl transition-all duration-200"
         >
           <X className="w-5 h-5 text-gray-500" />
         </button>
       </div>
 
       <div
-        className="border-b border-gray-100 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors"
+        className="border-b border-gray-100 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all duration-200"
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-emerald-600">锚定的原文</span>
+            <span className="text-xs font-semibold text-orange-600">锚定的原文</span>
             {branch.isSynced && (
-              <span className="px-1.5 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded">
+              <span className="px-1.5 py-0.5 bg-gradient-to-r from-orange-100 to-amber-100 text-orange-700 text-xs rounded-full font-medium">
                 已同步
               </span>
             )}
@@ -103,7 +102,7 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
         </div>
         {!isCollapsed && (
           <div className="px-4 pb-3">
-            <blockquote className="text-sm text-gray-600 italic border-l-3 border-emerald-300 pl-3 line-clamp-3">
+            <blockquote className="text-sm text-gray-600 italic border-l-3 border-orange-300 pl-3 line-clamp-3">
               {branch.anchorText}
             </blockquote>
           </div>
@@ -113,9 +112,9 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {branch.messages.length === 0 ? (
           <div className="text-center py-8">
-            <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg
-                className="w-8 h-8 text-emerald-500"
+                className="w-8 h-8 text-orange-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -136,8 +135,8 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
               <BranchMessageItem key={message.id} message={message} />
             ))}
             {isTyping && streamingContent && (
-              <div className="flex gap-3 p-3 bg-emerald-50 rounded-2xl">
-                <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="flex gap-3 p-3 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl">
+                <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex-1">
@@ -160,14 +159,14 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
           <button
             onClick={handleSync}
             disabled={branch.messages.length === 0 || branch.isSynced}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-xl hover:from-orange-600 hover:to-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-sm font-semibold shadow-lg shadow-orange-500/20"
           >
             <ArrowLeftRight className="w-4 h-4" />
             <span>{branch.isSynced ? '已同步' : '同步到主对话'}</span>
           </button>
           <button
             onClick={handleDelete}
-            className="flex items-center justify-center gap-2 px-3 py-2 text-red-600 border border-red-200 rounded-xl hover:bg-red-50 transition-colors text-sm"
+            className="flex items-center justify-center gap-2 px-3 py-2 text-red-600 border border-red-200 rounded-xl hover:bg-red-50 transition-all duration-200 text-sm"
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -180,12 +179,12 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
             onKeyDown={handleKeyDown}
             placeholder="在分支中提问..."
             rows={1}
-            className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 resize-none outline-none focus:ring-2 focus:ring-emerald-100 focus:border-emerald-300 transition-all text-sm"
+            className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 resize-none outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-300 transition-all duration-200 text-sm"
           />
           <button
             onClick={handleSubmit}
             disabled={!input.trim() || isTyping}
-            className="p-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="p-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-xl hover:from-orange-600 hover:to-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-orange-500/20"
           >
             {isTyping ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -207,8 +206,8 @@ const BranchMessageItem: React.FC<{ message: Message }> = ({ message }) => {
       <div
         className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
           message.role === 'user'
-            ? 'bg-indigo-500 text-white'
-            : 'bg-emerald-500 text-white'
+            ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white'
+            : 'bg-gradient-to-br from-violet-500 to-purple-600 text-white'
         }`}
       >
         {message.role === 'user' ? (
@@ -223,8 +222,8 @@ const BranchMessageItem: React.FC<{ message: Message }> = ({ message }) => {
         <div
           className={`inline-block px-4 py-2 rounded-2xl text-sm ${
             message.role === 'user'
-              ? 'bg-indigo-500 text-white rounded-tr-sm'
-              : 'bg-emerald-50 text-gray-700 rounded-tl-sm'
+              ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-tr-sm shadow-md'
+              : 'bg-gradient-to-br from-violet-50 to-purple-50 text-gray-700 rounded-tl-sm'
           }`}
         >
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
