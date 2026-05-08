@@ -140,12 +140,16 @@ export const useConversationStore = create<ConversationState>((set, get) => ({
       };
 
       const isFirstRound = conversation.messages.filter(m => m.role === 'user').length === 1;
+      console.log('isFirstRound:', isFirstRound, 'user count:', conversation.messages.filter(m => m.role === 'user').length);
       
       let newTitle = conversation.title;
       if (isFirstRound) {
         try {
+          console.log('Generating title...');
           newTitle = await apiService.generateTitle(content, assistantContent);
+          console.log('Generated title:', newTitle);
         } catch (e) {
+          console.error('Title generation failed:', e);
           newTitle = extractTitleFromAnswer(content);
         }
       }

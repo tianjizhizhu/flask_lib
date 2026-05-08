@@ -98,29 +98,11 @@ class APIService {
       },
     ];
 
-    const request: ChatRequest = {
-      model: this.config.model,
-      messages,
-      stream: false,
-    };
-
     try {
-      const response = await fetch(`${this.config.baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.config.apiKey}`,
-        },
-        body: JSON.stringify(request),
-      });
-
-      if (!response.ok) {
-        throw new Error('标题生成失败');
-      }
-
-      const data = await response.json();
-      const title = data.choices?.[0]?.message?.content?.trim() || '新对话';
-      return title.length > 20 ? title.slice(0, 20) + '...' : title;
+      // 复用 sendMessage 方法，不传 onChunk 表示非流式
+      const title = await this.sendMessage(messages);
+      const cleanTitle = title.trim().replace(/^["']|["']$/g, '');
+      return cleanTitle.length > 20 ? cleanTitle.slice(0, 20) + '...' : cleanTitle;
     } catch (error) {
       console.error('生成标题失败:', error);
       return userQuestion.slice(0, 20) + (userQuestion.length > 20 ? '...' : '');

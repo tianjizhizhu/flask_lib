@@ -21,7 +21,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSettingsClick }) =
     }
 
     const message = input.trim();
+    console.log('Clearing input...');
     setInput('');
+    console.log('Input cleared, sending message...');
 
     try {
       await sendMessage(message);
