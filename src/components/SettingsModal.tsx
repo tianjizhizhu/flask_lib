@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Eye, EyeOff, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { useConfigStore } from '../stores/configStore';
-import { DEFAULT_MODEL } from '../types';
+import { DEFAULT_MODEL, DEFAULT_BASE_URL } from '../types';
+import { apiService } from '../services/apiService';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -10,24 +11,35 @@ interface SettingsModalProps {
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
   const { config, setConfig, testConnection, clearConfig } = useConfigStore();
-  const [apiKey, setApiKey] = useState(config.apiKey);
-  const [model, setModel] = useState(config.model || DEFAULT_MODEL);
+  const [apiKey, setApiKey] = useState('');
+  const [model, setModel] = useState(DEFAULT_MODEL);
+  const [baseUrl, setBaseUrl] = useState(DEFAULT_BASE_URL);
   const [showApiKey, setShowApiKey] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
   const [isTesting, setIsTesting] = useState(false);
 
+  useEffect(() => {
+    if (isOpen) {
+      setApiKey(config.apiKey);
+      setModel(config.model || DEFAULT_MODEL);
+      setBaseUrl(config.baseUrl || DEFAULT_BASE_URL);
+      setTestResult(null);
+    }
+  }, [isOpen, config]);
+
   if (!isOpen) return null;
 
   const handleSave = () => {
-    setConfig({ ...config, apiKey, model });
+    setConfig({ apiKey, model, baseUrl });
     onClose();
   };
 
   const handleTest = async () => {
     setIsTesting(true);
     setTestResult(null);
-    const tempConfig = { ...config, apiKey, model };
-    const result = await testConnection();
+    const tempConfig = { apiKey, model, baseUrl };
+    apiService.setConfig(tempConfig);
+    const result = await apiService.testConnection();
     setTestResult(result);
     setIsTesting(false);
   };
@@ -36,6 +48,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     clearConfig();
     setApiKey('');
     setModel(DEFAULT_MODEL);
+    setBaseUrl(DEFAULT_BASE_URL);
     setTestResult(null);
   };
 
@@ -64,6 +77,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
         </div>
 
         <div className="p-6 space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Silicon Flow API地址
+            </label>
+            <input
+              type="text"
+              value={baseUrl}
+              onChange={(e) => setBaseUrl(e.target.value)}
+              placeholder="https://api.siliconflow.cn"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Silicon Flow API密钥
