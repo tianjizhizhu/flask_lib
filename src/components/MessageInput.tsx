@@ -20,9 +20,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSettingsClick }) =
       return;
     }
 
+    const message = input.trim();
+    setInput('');
+
     try {
-      await sendMessage(input.trim());
-      setInput('');
+      await sendMessage(message);
     } catch (error) {
       alert(error instanceof Error ? error.message : '发送失败，请重试');
     }
