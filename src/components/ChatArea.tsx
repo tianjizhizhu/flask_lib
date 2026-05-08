@@ -83,7 +83,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick, onMenuClick
 
   return (
     <div className="flex-1 flex overflow-hidden relative">
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         <div className="flex items-center gap-2 p-4 md:hidden">
           <button
             onClick={onMenuClick}
@@ -169,7 +169,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick, onMenuClick
 
       {activeBranch && (
         <>
-          <div className="hidden md:flex w-96 flex-shrink-0 h-full transition-all duration-300">
+          <div className="hidden md:flex w-96 flex-shrink-0 overflow-hidden transition-all duration-300">
             <BranchPanel branch={activeBranch} onClose={handleCloseBranch} />
           </div>
           
