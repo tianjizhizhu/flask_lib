@@ -178,7 +178,7 @@ export const useConversationStore = create<ConversationState>((set, get) => ({
             ? {
                 ...c,
                 messages: [...c.messages, assistantMessage],
-                title: c.messages.length === 0 ? extractTitleFromAnswer(content, assistantContent) : c.title,
+                title: c.title === '新对话' ? extractTitleFromAnswer(content, assistantContent) : c.title,
                 updatedAt: Date.now(),
               }
             : c
