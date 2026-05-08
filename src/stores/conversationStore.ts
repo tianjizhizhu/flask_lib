@@ -28,45 +28,12 @@ interface ConversationState {
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
 
-const generateTitle = (content: string): string => {
-  const trimmed = content.trim();
-  if (trimmed.length <= 30) {
-    return trimmed;
+const extractTitleFromAnswer = (userQuestion: string): string => {
+  const trimmedQuestion = userQuestion.trim();
+  if (trimmedQuestion.length <= 30) {
+    return trimmedQuestion;
   }
-  
-  const sentences = trimmed.split(/[。！？\n]/);
-  if (sentences.length > 0 && sentences[0].trim().length > 0) {
-    const firstSentence = sentences[0].trim();
-    return firstSentence.length <= 30 ? firstSentence : firstSentence.slice(0, 30) + '...';
-  }
-  return trimmed.slice(0, 30) + '...';
-};
-
-const extractTitleFromAnswer = (userQuestion: string, aiAnswer: string): string => {
-  const trimmedAnswer = aiAnswer.trim();
-  
-  const patterns = [
-    /(问题|答案|总结|结论|要点)[:：]\s*(.+?)([。！？\n]|$)/,
-    /(针对|关于|对于)\s*(.+?)(的|问题|，)/,
-    /您问的是\s*(.+?)([。！？\n]|$)/,
-    /我来回答\s*(.+?)([。！？\n]|$)/,
-  ];
-  
-  for (const pattern of patterns) {
-    const match = trimmedAnswer.match(pattern);
-    if (match && match[2] && match[2].trim().length > 0) {
-      const extracted = match[2].trim();
-      return extracted.length <= 30 ? extracted : extracted.slice(0, 30) + '...';
-    }
-  }
-  
-  const sentences = trimmedAnswer.split(/[。！？\n]/);
-  if (sentences.length > 0 && sentences[0].trim().length > 0) {
-    const firstSentence = sentences[0].trim();
-    return firstSentence.length <= 30 ? firstSentence : firstSentence.slice(0, 30) + '...';
-  }
-  
-  return generateTitle(userQuestion);
+  return trimmedQuestion.slice(0, 30) + '...';
 };
 
 export const useConversationStore = create<ConversationState>((set, get) => ({
@@ -178,7 +145,7 @@ export const useConversationStore = create<ConversationState>((set, get) => ({
             ? {
                 ...c,
                 messages: [...c.messages, assistantMessage],
-                title: c.title === '新对话' ? extractTitleFromAnswer(content, assistantContent) : c.title,
+                title: c.title === '新对话' ? extractTitleFromAnswer(content) : c.title,
                 updatedAt: Date.now(),
               }
             : c
