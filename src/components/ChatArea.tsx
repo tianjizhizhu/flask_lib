@@ -1,15 +1,16 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Message } from './Message';
 import { MessageInput } from './MessageInput';
 import { BranchPanel } from './BranchPanel';
 import { useConversationStore } from '../stores/conversationStore';
-import { Send, MessageSquare } from 'lucide-react';
+import { MessageSquare, Menu, X } from 'lucide-react';
 
 interface ChatAreaProps {
   onSettingsClick: () => void;
+  onMenuClick: () => void;
 }
 
-export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick }) => {
+export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick, onMenuClick }) => {
   const {
     currentConversation,
     branches,
@@ -19,6 +20,8 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick }) => {
     createBranch,
     toggleBranch,
   } = useConversationStore();
+
+  const [isMobileBranchOpen, setIsMobileBranchOpen] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -38,17 +41,26 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick }) => {
 
   const handleToggleBranch = (messageId: string) => {
     toggleBranch(messageId);
+    setIsMobileBranchOpen(true);
   };
 
   const handleCloseBranch = () => {
     if (activeBranchId) {
       toggleBranch(activeBranchId);
     }
+    setIsMobileBranchOpen(false);
   };
 
   if (!currentConversation) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center bg-gray-50">
+        <button
+          onClick={onMenuClick}
+          className="absolute top-20 left-4 p-2 bg-white rounded-lg shadow-md md:hidden"
+        >
+          <Menu className="w-6 h-6 text-gray-600" />
+        </button>
+        
         <div className="text-center max-w-md px-8">
           <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-500/20">
             <MessageSquare className="w-10 h-10 text-white" />
@@ -67,12 +79,36 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick }) => {
     );
   }
 
+  const hasBranches = Object.keys(branches).length > 0;
+
   return (
-    <div className="flex-1 flex overflow-hidden">
+    <div className="flex-1 flex overflow-hidden relative">
       <div className="flex-1 flex flex-col">
+        <div className="flex items-center gap-2 p-4 md:hidden">
+          <button
+            onClick={onMenuClick}
+            className="p-2 bg-white rounded-lg shadow-sm hover:bg-gray-50"
+          >
+            <Menu className="w-5 h-5 text-gray-600" />
+          </button>
+          <h2 className="font-medium text-gray-800 truncate flex-1">
+            {currentConversation.title || '新对话'}
+          </h2>
+          {hasBranches && (
+            <button
+              onClick={() => setIsMobileBranchOpen(true)}
+              className="p-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+            </button>
+          )}
+        </div>
+
         <div
           ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto px-6 py-6 space-y-4"
+          className="flex-1 overflow-y-auto px-4 md:px-6 py-4 md:py-6 space-y-4"
         >
           {currentConversation.messages.length === 0 ? (
             <div className="text-center py-12">
@@ -132,7 +168,30 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick }) => {
       </div>
 
       {activeBranch && (
-        <BranchPanel branch={activeBranch} onClose={handleCloseBranch} />
+        <>
+          <div 
+            className="hidden md:block"
+          >
+            <BranchPanel branch={activeBranch} onClose={handleCloseBranch} />
+          </div>
+          
+          {isMobileBranchOpen && (
+            <div className="fixed inset-0 z-50 md:hidden">
+              <div className="absolute inset-0 bg-black/50" onClick={handleCloseBranch} />
+              <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-xl">
+                <div className="flex items-center justify-between p-4 border-b">
+                  <h3 className="font-semibold text-gray-800">分支讨论</h3>
+                  <button onClick={handleCloseBranch} className="p-2 hover:bg-gray-100 rounded-lg">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="h-[calc(100%-60px)]">
+                  <BranchPanel branch={activeBranch} onClose={handleCloseBranch} />
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

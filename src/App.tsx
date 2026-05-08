@@ -8,12 +8,29 @@ import { useConversationStore } from './stores/conversationStore';
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const { loadConfig, isConfigured } = useConfigStore();
-  const { loadConversations, createConversation } = useConversationStore();
+  const { loadConversations } = useConversationStore();
 
   useEffect(() => {
     loadConfig();
     loadConversations();
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   useEffect(() => {
@@ -27,8 +44,14 @@ function App() {
       <Header onSettingsClick={() => setIsSettingsOpen(true)} />
 
       <div className="flex-1 flex overflow-hidden">
-        <Sidebar />
-        <ChatArea onSettingsClick={() => setIsSettingsOpen(true)} />
+        <Sidebar 
+          isOpen={isSidebarOpen} 
+          onToggle={() => setIsSidebarOpen(!isSidebarOpen)} 
+        />
+        <ChatArea 
+          onSettingsClick={() => setIsSettingsOpen(true)} 
+          onMenuClick={() => setIsSidebarOpen(true)}
+        />
       </div>
 
       <SettingsModal
