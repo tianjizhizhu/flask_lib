@@ -137,12 +137,20 @@ export const BranchPanel: React.FC<BranchPanelProps> = ({ branch, onClose }) => 
               <BranchMessageItem key={message.id} message={message} />
             ))}
             {isTyping && streamingContent && (
-              <div className="flex gap-3 p-3 bg-white/80 backdrop-blur-md border border-gray-100 rounded-2xl shadow-sm">
-                <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="animate-slideInLeft flex gap-3 p-3 bg-white/80 backdrop-blur-md border border-gray-100 rounded-2xl shadow-sm">
+                <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
                   <Bot className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="text-xs text-gray-500 mb-1">AI助手 正在输入...</div>
+                  <div className="text-xs text-gray-500 mb-1 flex items-center gap-2">
+                    <span>AI助手</span>
+                    <span className="text-xs text-gray-400">正在输入</span>
+                    <div className="flex gap-1">
+                      <span className="typing-dot w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                      <span className="typing-dot w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                      <span className="typing-dot w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                    </div>
+                  </div>
                   <div className="text-sm text-gray-700">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {streamingContent}
