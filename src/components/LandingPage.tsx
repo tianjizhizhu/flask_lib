@@ -7,43 +7,18 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsVisible(true);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20
-      });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 overflow-x-hidden relative">
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div 
-          className="absolute w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl transition-transform duration-1000 ease-out"
-          style={{ 
-            left: `calc(20% + ${mousePosition.x}px)`,
-            top: `calc(30% + ${mousePosition.y}px)`,
-            transform: 'translate(-50%, -50%)'
-          }}
-        />
-        <div 
-          className="absolute w-80 h-80 bg-purple-500/20 rounded-full blur-3xl transition-transform duration-1000 ease-out"
-          style={{ 
-            right: `calc(15% - ${mousePosition.x}px)`,
-            bottom: `calc(20% - ${mousePosition.y}px)`,
-            transform: 'translate(50%, 50%)'
-          }}
-        />
+        <div className="absolute w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-float" style={{ left: '10%', top: '20%' }} />
+        <div className="absolute w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-float" style={{ right: '10%', bottom: '30%', animationDelay: '1s' }} />
+        <div className="absolute w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-float" style={{ left: '50%', top: '60%', animationDelay: '2s' }} />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"/>
       </div>
 
@@ -70,14 +45,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             {/* Floating branch visualization */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none">
               <svg className="w-full h-48 -mt-8 opacity-20" viewBox="0 0 400 100">
-                <path d="M200 80 C 150 80, 100 60, 60 30" stroke="url(#gradient)" strokeWidth="2" fill="none" strokeDasharray="5,5">
-                  <animate attributeName="stroke-dashoffset" from="0" to="20" dur="1s" repeatCount="indefinite"/>
-                </path>
-                <path d="M200 80 C 250 80, 300 60, 340 30" stroke="url(#gradient2)" strokeWidth="2" fill="none" strokeDasharray="5,5">
-                  <animate attributeName="stroke-dashoffset" from="0" to="20" dur="1s" repeatCount="indefinite"/>
-                </path>
-                <circle cx="60" cy="30" r="4" fill="#818cf8" className="animate-ping"/>
-                <circle cx="340" cy="30" r="4" fill="#c084fc" className="animate-ping"/>
+                <path d="M200 80 C 150 80, 100 60, 60 30" stroke="url(#gradient)" strokeWidth="2" fill="none" strokeDasharray="5,5" />
+                <path d="M200 80 C 250 80, 300 60, 340 30" stroke="url(#gradient2)" strokeWidth="2" fill="none" strokeDasharray="5,5" />
+                <circle cx="60" cy="30" r="4" fill="#818cf8">
+                  <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="340" cy="30" r="4" fill="#c084fc">
+                  <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" begin="0.5s" />
+                </circle>
                 <defs>
                   <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#6366f1"/>
