@@ -47,7 +47,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
         className={clsx(
           'flex gap-4 p-4 md:p-5 rounded-2xl shadow-sm',
           message.role === 'user' 
-            ? 'bg-gradient-to-br from-indigo-500 to-purple-600' 
+            ? 'bg-white border-2 border-indigo-100 hover:border-indigo-200 transition-colors' 
             : 'bg-white/80 backdrop-blur-md border border-gray-100',
           isBranchActive && 'border-r-4 border-r-indigo-400'
         )}
@@ -56,7 +56,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
           className={clsx(
             'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md transition-transform duration-300 group-hover:scale-110',
             message.role === 'user'
-              ? 'bg-white/20 text-white'
+              ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white'
               : 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white'
           )}
         >
@@ -71,7 +71,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
           <div className="flex items-center gap-2 mb-2">
             <span className={clsx(
               'text-sm font-semibold',
-              message.role === 'user' ? 'text-white' : 'text-gray-800'
+              message.role === 'user' ? 'text-indigo-700' : 'text-gray-800'
             )}>
               {message.role === 'user' ? '你' : 'AI助手'}
             </span>
@@ -96,7 +96,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                         className={clsx(
                           'px-1.5 py-0.5 rounded text-sm font-mono',
                           message.role === 'user' 
-                            ? 'bg-white/20 text-white' 
+                            ? 'bg-indigo-100 text-indigo-700' 
                             : 'bg-gray-100 text-gray-700'
                         )}
                         {...props}
@@ -123,7 +123,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                   return (
                     <p className={clsx(
                       'leading-relaxed mb-3 last:mb-0',
-                      message.role === 'user' ? 'text-white/90' : 'text-gray-700'
+                      message.role === 'user' ? 'text-gray-700' : 'text-gray-700'
                     )}>
                       {children}
                     </p>
@@ -133,7 +133,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                   return (
                     <ul className={clsx(
                       'list-disc list-inside space-y-1 mb-3',
-                      message.role === 'user' ? 'text-white/90' : 'text-gray-700'
+                      message.role === 'user' ? 'text-gray-700' : 'text-gray-700'
                     )}>
                       {children}
                     </ul>
@@ -143,7 +143,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                   return (
                     <ol className={clsx(
                       'list-decimal list-inside space-y-1 mb-3',
-                      message.role === 'user' ? 'text-white/90' : 'text-gray-700'
+                      message.role === 'user' ? 'text-gray-700' : 'text-gray-700'
                     )}>
                       {children}
                     </ol>
@@ -158,7 +158,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                       className={clsx(
                         'underline underline-offset-2 transition-colors duration-200',
                         message.role === 'user' 
-                          ? 'text-white hover:text-indigo-200' 
+                          ? 'text-indigo-600 hover:text-indigo-700' 
                           : 'text-indigo-600 hover:text-indigo-700'
                       )}
                     >
@@ -171,7 +171,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                     <blockquote className={clsx(
                       'border-l-4 pl-4 italic my-3',
                       message.role === 'user' 
-                        ? 'border-white/30 text-white/80' 
+                        ? 'border-indigo-300 text-gray-600' 
                         : 'border-indigo-300 text-gray-600'
                     )}>
                       {children}
@@ -182,7 +182,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                   return (
                     <h1 className={clsx(
                       'text-xl font-bold mb-3 mt-4',
-                      message.role === 'user' ? 'text-white' : 'text-gray-800'
+                      message.role === 'user' ? 'text-gray-800' : 'text-gray-800'
                     )}>
                       {children}
                     </h1>
@@ -192,7 +192,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                   return (
                     <h2 className={clsx(
                       'text-lg font-bold mb-2 mt-3',
-                      message.role === 'user' ? 'text-white' : 'text-gray-800'
+                      message.role === 'user' ? 'text-gray-800' : 'text-gray-800'
                     )}>
                       {children}
                     </h2>
@@ -202,7 +202,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                   return (
                     <h3 className={clsx(
                       'text-base font-semibold mb-2 mt-2',
-                      message.role === 'user' ? 'text-white' : 'text-gray-800'
+                      message.role === 'user' ? 'text-gray-800' : 'text-gray-800'
                     )}>
                       {children}
                     </h3>
@@ -212,7 +212,7 @@ export const Message: React.FC<MessageProps> = ({ message, onCreateBranch, onTog
                   return (
                     <strong className={clsx(
                       'font-semibold',
-                      message.role === 'user' ? 'text-white' : 'text-gray-800'
+                      message.role === 'user' ? 'text-gray-800' : 'text-gray-800'
                     )}>
                       {children}
                     </strong>
