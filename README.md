@@ -4,9 +4,19 @@
 
 **预览网址**: [https://forkforkchat.vercel.app/](https://forkforkchat.vercel.app/)
 
+<img width="2560" height="1435" alt="image" src="https://github.com/user-attachments/assets/33557464-0f77-47c2-923b-92ed6101b8ee" />
+
 ---
 
 ## ✨ 核心特性
+
+你是否像我一样，在与AI对话过程中，不敢就它回答中的关键词进行提问，以防打断了聊天节奏。
+
+或者某次你确实不得不追问，几番回合下来之后AI早已忘记聊到了哪里。
+
+最后你不得不每次遇到需要追问的细节，就fork一段对话去新的窗口，傻傻地问完之后再回到原对话。
+
+ForkForkChat就是为了解决这个问题而生，它允许你就某段对话fork到侧边栏问答，不会打断主流对话，你可以放心问完之后回到主对话中。
 
 ### 锚定对话
 针对 AI 回复中的任意片段创建锚点，像 Word 批注一样精准定位讨论内容，不再迷失在长篇回复中。
