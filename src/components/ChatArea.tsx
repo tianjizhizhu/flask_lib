@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Message } from './Message';
 import { MessageInput } from './MessageInput';
 import { BranchPanel } from './BranchPanel';
+import Empty from './Empty';
 import { useConversationStore } from '../stores/conversationStore';
 import { MessageSquare, Menu, X, Bot } from 'lucide-react';
 
@@ -60,21 +61,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({ onSettingsClick, onMenuClick
         >
           <Menu className="w-5 h-5 text-gray-600" />
         </button>
-        
-        <div className="text-center max-w-md px-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-500/20">
-            <MessageSquare className="w-10 h-10 text-white" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-3">欢迎使用 ForkForkChat</h2>
-          <p className="text-gray-500 leading-relaxed mb-6">
-            这是一款支持锚定式分支对话的AI聊天产品。您可以针对AI回复中的特定片段创建分支讨论，
-            像Word批注一样精准地展开细节讨论，完成后可顺畅回归主对话。
-          </p>
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
-            <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
-            <span>配置API后即可开始使用</span>
-          </div>
-        </div>
+        <Empty />
       </div>
     );
   }

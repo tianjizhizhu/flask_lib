@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Eye, EyeOff, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { X, Eye, EyeOff, CheckCircle, AlertCircle, Loader2, Settings } from 'lucide-react';
 import { useConfigStore } from '../stores/configStore';
 import { DEFAULT_MODEL, DEFAULT_BASE_URL } from '../types';
 import { apiService } from '../services/apiService';
@@ -17,9 +17,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   const [showApiKey, setShowApiKey] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
   const [isTesting, setIsTesting] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      setIsVisible(true);
       setApiKey(config.apiKey);
       setModel(config.model || DEFAULT_MODEL);
       setBaseUrl(config.baseUrl || DEFAULT_BASE_URL);
@@ -27,11 +29,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     }
   }, [isOpen, config]);
 
-  if (!isOpen) return null;
-
-  const handleSave = () => {
-    setConfig({ apiKey, model, baseUrl });
-    onClose();
+  const handleClose = () => {
+    setIsVisible(false);
+    setTimeout(onClose, 200);
   };
 
   const handleTest = async () => {
@@ -52,6 +52,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setTestResult(null);
   };
 
+  const handleSave = () => {
+    setConfig({ apiKey, model, baseUrl });
+    handleClose();
+  };
+
+  if (!isOpen && !isVisible) return null;
+
   const quickModels = [
     { value: 'deepseek-ai/DeepSeek-V3', label: 'DeepSeek V3' },
     { value: 'deepseek-ai/DeepSeek-R1', label: 'DeepSeek R1' },
@@ -64,21 +71,40 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-800">API配置</h2>
+    <div 
+      className={`fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-200 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+      onClick={handleClose}
+    >
+      <div 
+        className={`bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transition-all duration-300 ${
+          isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+              <Settings className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">API配置</h2>
+              <p className="text-xs text-gray-500">配置你的 AI 连接</p>
+            </div>
+          </div>
           <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            onClick={handleClose}
+            className="p-2 hover:bg-white/80 rounded-xl transition-all duration-200 hover:scale-110"
           >
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
 
         <div className="p-6 space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="group">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <span className="w-2 h-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full"/>
               Silicon Flow API地址
             </label>
             <input
@@ -86,12 +112,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               value={baseUrl}
               onChange={(e) => setBaseUrl(e.target.value)}
               placeholder="https://api.siliconflow.cn"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white group-hover:border-indigo-200"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="group">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <span className="w-2 h-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full"/>
               Silicon Flow API密钥
             </label>
             <div className="relative">
@@ -100,12 +127,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="请输入您的API密钥"
-                className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all group-hover:border-indigo-200"
               />
               <button
                 type="button"
                 onClick={() => setShowApiKey(!showApiKey)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-indigo-600 transition-colors"
               >
                 {showApiKey ? (
                   <EyeOff className="w-5 h-5" />
@@ -114,13 +141,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 )}
               </button>
             </div>
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-gray-500 flex items-center gap-1">
+              <span className="w-1 h-1 bg-gray-400 rounded-full"/>
               请从 Silicon Flow 官网获取API密钥
             </p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="group">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <span className="w-2 h-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full"/>
               模型名称
             </label>
             <input
@@ -128,17 +157,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               value={model}
               onChange={(e) => setModel(e.target.value)}
               placeholder="例如: deepseek-ai/DeepSeek-V3"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white group-hover:border-indigo-200"
             />
             <div className="mt-3 flex flex-wrap gap-2">
               {quickModels.map((m) => (
                 <button
                   key={m.value}
                   onClick={() => setModel(m.value)}
-                  className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
+                  className={`px-3 py-1.5 text-xs rounded-lg transition-all duration-200 ${
                     model === m.value
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
+                      : 'bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600'
                   }`}
                 >
                   {m.label}
@@ -149,18 +178,26 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
           {testResult && (
             <div
-              className={`flex items-center gap-2 p-3 rounded-xl ${
+              className={`flex items-center gap-3 p-4 rounded-xl animate-fadeInScale ${
                 testResult.success
-                  ? 'bg-green-50 text-green-700'
-                  : 'bg-red-50 text-red-700'
+                  ? 'bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200'
+                  : 'bg-gradient-to-r from-red-50 to-pink-50 border border-red-200'
               }`}
             >
               {testResult.success ? (
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                  <CheckCircle className="w-5 h-5 text-white" />
+                </div>
               ) : (
-                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-500/30">
+                  <AlertCircle className="w-5 h-5 text-white" />
+                </div>
               )}
-              <span className="text-sm">{testResult.message}</span>
+              <span className={`text-sm font-medium ${
+                testResult.success ? 'text-emerald-700' : 'text-red-700'
+              }`}>
+                {testResult.message}
+              </span>
             </div>
           )}
 
@@ -168,7 +205,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
             <button
               onClick={handleTest}
               disabled={!apiKey || isTesting}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-indigo-200 text-indigo-600 rounded-xl hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
             >
               {isTesting ? (
                 <>
@@ -176,28 +213,31 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   <span>测试中...</span>
                 </>
               ) : (
-                <span>测试连接</span>
+                <>
+                  <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"/>
+                  <span>测试连接</span>
+                </>
               )}
             </button>
             <button
               onClick={handleClear}
-              className="px-4 py-3 text-red-600 border border-red-200 rounded-xl hover:bg-red-50 transition-colors"
+              className="px-4 py-3 text-red-600 border-2 border-red-200 rounded-xl hover:bg-red-50 transition-all duration-200 font-medium"
             >
               清除配置
             </button>
           </div>
         </div>
 
-        <div className="flex gap-3 px-6 py-4 bg-gray-50 border-t border-gray-100">
+        <div className="flex gap-3 px-6 py-4 bg-gradient-to-r from-gray-50 to-indigo-50/30 border-t border-gray-100">
           <button
-            onClick={onClose}
-            className="flex-1 px-4 py-3 border border-gray-200 rounded-xl hover:bg-white transition-colors"
+            onClick={handleClose}
+            className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl hover:bg-white transition-all duration-200 font-medium text-gray-600"
           >
             取消
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg shadow-blue-500/20"
+            className="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg shadow-indigo-500/30 font-medium"
           >
             保存配置
           </button>
