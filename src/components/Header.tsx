@@ -11,10 +11,10 @@ export const Header: React.FC<HeaderProps> = ({ onSettingsClick }) => {
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
           <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m12 19-7-7 7-7" />
-            <path d="M19 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7" />
-            <path d="m22 15-8.97-8.97" />
-            <circle cx="12" cy="12" r="3" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="18" r="3" />
+            <circle cx="12" cy="6" r="3" />
+            <path d="M6 18V10a6 6 0 0 1 12 0v8" />
           </svg>
         </div>
         <div>
